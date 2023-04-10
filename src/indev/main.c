@@ -88,7 +88,7 @@ int* addStudent(struct studentRecord **head){
     // Error-checking and prevention.
     // Number is given as character, checked if it is a real number then checked if it is in-range.
     while(courseSelect == 0){
-        printf("Select Course Code:\n1. DT265A\n2. DT265B\n3. DT265C\n4. DT8900\n");
+        printf("Select Course Code:\n1. DT265A\n2. DT265B\n3. DT265C\n4. DT8900\n5. Exit\n");
 
         char course;
         scanf("%c", &course);
@@ -108,8 +108,12 @@ int* addStudent(struct studentRecord **head){
                     courseSelect = 1;
                 }
                 else{
-                    printf("Insuffecient space. Please Select another course!\n");
+                    printf("Insufficient space. Please Select another course!\n");
                 }
+            }
+            else if(courseNum == 5){
+                printf("Exiting Student Addition Menu.\n\n");
+                return '\0';
             }
             else{
                 printf("%d is not a valid value!", courseNum);
@@ -117,10 +121,18 @@ int* addStudent(struct studentRecord **head){
         }
     }
 
-
-
     printf("Please enter Student's FIRST Name: ");
     fgets((addingStudent) -> firstName, MEDIUM, stdin);
+
+    printf("Please enter the Student's SURNAME: ");
+    fgets((addingStudent) -> surname, LARGE, stdin);
+
+    printf("Please enter the Student's ID: ");
+    fgets((addingStudent) -> studentID, MEDIUM, stdin);
+
+    printf("What year is the student in?\n");
+    scanf("%d", &(addingStudent) -> year);
+
 }
 
 int* removeStudent(struct studentRecord **sRec){
