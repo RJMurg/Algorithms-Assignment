@@ -1,0 +1,4 @@
+Design a suitable datatype for manipulating and storing the data having regard to the underlying changeability and the need for instant reporting.
+Explain your design.
+
+Structure
