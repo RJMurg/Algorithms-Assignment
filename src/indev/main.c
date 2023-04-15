@@ -54,27 +54,25 @@ struct node{
 
 // Function Signatures
 
-struct node* addStudent(struct node *);
-struct node* removeStudent(struct node *);
-void searchStudent(char*);
+struct node* addStudent(struct studentRecord [], struct studentRecord [], struct studentRecord [], struct studentRecord [], struct node *);
+struct node* removeStudent(struct studentRecord [], struct studentRecord [], struct studentRecord [], struct studentRecord [], struct node *);
+void searchStudent(struct node *, char *);
 struct node* generateData(struct studentRecord [], struct studentRecord [], struct studentRecord [], struct studentRecord [], struct node *, int, int, int, int);
 void sortCourseArray(struct studentRecord [], int);
 void viewCourseData(struct studentRecord [], int);
 struct node* createLinkedList(struct studentRecord [], struct studentRecord [], struct studentRecord [], struct studentRecord [], struct node *);
 void merge(struct studentRecord [], int, int, int);
 void mergeSort(struct studentRecord [], int, int);
+void printLinkedList(struct node *head);
 const char* getCourseName(int);
 int modifyCourseOccupancy(int, int);
 
 int main(){
-
-
-    struct node listHead;
+    struct node *listHead = {NULL};
     struct studentRecord DT265A[13];
     struct studentRecord DT265B[14];
     struct studentRecord DT265C[9];
     struct studentRecord DT8900[6];
-
 
     int loopActive = 1;
     char userChoice = '0';
@@ -82,32 +80,33 @@ int main(){
 
     while(loopActive){
         printf("--=<[Please Choose an Action]>=--\n");
-        printf("1. Add User\n2. Remove User\n3. Search for User\n4. View Course Information\n5. Generate Test Data\n6. End Program\n");
+        printf("1. Add User\n2. Remove User\n3. Search for User\n4. View Students\n5. Generate Test Data\n6. End Program\n");
 
         scanf("%c", &userChoice);
         CLEAR
 
         switch(userChoice){
             case '1':{
-                addStudent(&listHead);
+                listHead = addStudent(DT265A, DT265B, DT265C, DT8900, listHead);
                 break;
             }
 
             case '2':{
-                removeStudent(&listHead);
+                listHead = removeStudent(DT265A, DT265B, DT265C, DT8900, listHead);
                 break;
             }
 
             case '3':{
                 printf("Enter the Student's Surname: ");
                 fgets(studentName, LARGE, stdin);
-                //searchStudent(studentName);
+                studentName[strcspn(studentName, "\r\n")] = '\0';
+                searchStudent(listHead, studentName);
                 break;
             }
 
             case '4':{
                 char courseChoice = '0';
-                printf("Which course do you want to view?\n1. DT265A\n2. DT265B\n3. DT265C\n4. DT8900\n");
+                printf("Which course do you want to view?\n1. DT265A\n2. DT265B\n3. DT265C\n4. DT8900\n5. Complete List\n");
                 scanf("%c", &courseChoice);
 
                 switch(courseChoice){
@@ -135,6 +134,11 @@ int main(){
                         break;
                     }
 
+                    case '5':{
+                        printLinkedList(listHead);
+                        break;
+                    }
+
                     default:{
                         printf("Invalid option!\n");
                         break;
@@ -144,7 +148,7 @@ int main(){
             }
 
             case '5':{
-                generateData(DT265A, DT265B, DT265C, DT8900, &listHead, sizeof(DT265A), sizeof(DT265B), sizeof(DT265C), sizeof(DT8900));
+                listHead = generateData(DT265A, DT265B, DT265C, DT8900, listHead, sizeof(DT265A), sizeof(DT265B), sizeof(DT265C), sizeof(DT8900));
                 break;
             }
 
@@ -167,23 +171,10 @@ int main(){
 // addStudent will add the student to the linked list.
 // Call this function with a completed Student Record Struct
 // This returns a pointer to the array of students.
-struct node* addStudent(struct node *head){
+struct node* addStudent(struct studentRecord DT265A[], struct studentRecord DT265B[], struct studentRecord DT265C[], struct studentRecord DT8900[], struct node *head){
     // Req'd Local Variables
     int courseSelect = 0;
-
-    /* Note to Programmer:
-    TO-DO:
-    - New Struct
-    - Get Data
-    - Validate Data
-    - Malloc & Validate
-    - Linked List
-    */
-    
-    // We need a temporary malloc'd variable to store this information as it is entered,
-    // then it is written to the linked list and freed.
-    // When adding to the struct, use arrow notation.
-    struct studentRecord *addingStudent = malloc(sizeof(struct studentRecord));
+    int chosenCourseNum = 
 
     printf("\n---==<[STUDENT ADDITION MENU]>==---\n");
     
@@ -203,11 +194,102 @@ struct node* addStudent(struct node *head){
             // C stores chars as ASCII integers, taking away the ASCII value of '0' from the char number gives an integer value!
             // This would cause problems if it was not a number ('A' for example), but the parent if-statement catches that.
             int courseNum = course - '0';
+            int chosenCourseNum = courseNum;
 
             if(courseNum > 0 && courseNum < 5){
                 if(modifyCourseOccupancy(courseNum, 1) == 1){
                     printf("Course %s selected!\n", getCourseName(courseNum));
                     courseSelect = 1;
+
+                    switch(courseNum){
+                        case 1:{
+                            printf("Please enter Student's FIRST Name: ");
+                            fgets(DT265A[-DT265AFree].firstName, MEDIUM, stdin);
+
+                            DT265A[-DT265AFree].firstName[strcspn(DT265A[-DT265AFree].firstName, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's SURNAME: ");
+                            fgets(DT265A[-DT265AFree].surname, LARGE, stdin);
+
+                            DT265A[-DT265AFree].surname[strcspn(DT265A[-DT265AFree].surname, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's ID: ");
+                            fgets(DT265A[-DT265AFree].studentID, MEDIUM, stdin);
+
+                            DT265A[-DT265AFree].studentID[strcspn(DT265A[-DT265AFree].studentID, "\n\r")] = '\0';
+
+                            printf("What year is the student in?\n");
+                            scanf("%d", &DT265A[-DT265AFree].year);
+                            break;
+                        }
+
+                        case 2:{
+                            printf("Please enter Student's FIRST Name: ");
+                            fgets(DT265B[-DT265BFree].firstName, MEDIUM, stdin);
+
+                            DT265B[-DT265BFree].firstName[strcspn(DT265B[-DT265BFree].firstName, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's SURNAME: ");
+                            fgets(DT265B[-DT265BFree].surname, LARGE, stdin);
+
+                            DT265B[-DT265BFree].surname[strcspn(DT265B[-DT265BFree].surname, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's ID: ");
+                            fgets(DT265B[-DT265BFree].studentID, MEDIUM, stdin);
+
+                            DT265B[-DT265BFree].studentID[strcspn(DT265B[-DT265BFree].studentID, "\n\r")] = '\0';
+
+                            printf("What year is the student in?\n");
+                            scanf("%d", &DT265B[-DT265BFree].year);
+                            break;
+                        }
+
+                        case 3:{
+                            printf("Please enter Student's FIRST Name: ");
+                            fgets(DT265C[-DT265CFree].firstName, MEDIUM, stdin);
+
+                            DT265C[-DT265CFree].firstName[strcspn(DT265C[-DT265CFree].firstName, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's SURNAME: ");
+                            fgets(DT265C[-DT265CFree].surname, LARGE, stdin);
+
+                            DT265C[-DT265CFree].surname[strcspn(DT265C[-DT265CFree].surname, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's ID: ");
+                            fgets(DT265C[-DT265CFree].studentID, MEDIUM, stdin);
+
+                            DT265C[-DT265CFree].studentID[strcspn(DT265C[-DT265CFree].studentID, "\n\r")] = '\0';
+
+                            printf("What year is the student in?\n");
+                            scanf("%d", &DT265C[-DT265CFree].year);
+                            break;
+                        }
+
+                        case 4:{
+                            printf("Please enter Student's FIRST Name: ");
+                            fgets(DT8900[-DT8900Free].firstName, MEDIUM, stdin);
+
+                            DT8900[-DT8900Free].firstName[strcspn(DT8900[-DT8900Free].firstName, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's SURNAME: ");
+                            fgets(DT8900[-DT8900Free].surname, LARGE, stdin);
+
+                            DT8900[-DT8900Free].surname[strcspn(DT8900[-DT8900Free].surname, "\n\r")] = '\0';
+
+                            printf("Please enter the Student's ID: ");
+                            fgets(DT8900[-DT8900Free].studentID, MEDIUM, stdin);
+
+                            DT8900[-DT8900Free].studentID[strcspn(DT8900[-DT8900Free].studentID, "\n\r")] = '\0';
+
+                            printf("What year is the student in?\n");
+                            scanf("%d", &DT8900[-DT8900Free].year);
+                            break;
+                        }
+                    }
+
+                    head = createLinkedList(DT265A, DT265B, DT265C, DT8900, head);
+
+                    return head;
                 }
                 else{
                     printf("Insufficient space. Please Select another course!\n");
@@ -215,30 +297,69 @@ struct node* addStudent(struct node *head){
             }
             else if(courseNum == 5){
                 printf("Exiting Student Addition Menu.\n\n");
-                return '\0';
+                return head;
             }
             else{
                 printf("%d is not a valid value!", courseNum);
             }
         }
     }
-
-    printf("Please enter Student's FIRST Name: ");
-    fgets((addingStudent) -> firstName, MEDIUM, stdin);
-
-    printf("Please enter the Student's SURNAME: ");
-    fgets((addingStudent) -> surname, LARGE, stdin);
-
-    printf("Please enter the Student's ID: ");
-    fgets((addingStudent) -> studentID, MEDIUM, stdin);
-
-    printf("What year is the student in?\n");
-    scanf("%d", &(addingStudent) -> year);
-
 }
 
-struct node* removeStudent(struct node *head){
+struct node* removeStudent(struct studentRecord DT265A[], struct studentRecord DT265B[], struct studentRecord DT265C[], struct studentRecord DT8900[], struct node *head){
+    printf("\n---==<[STUDENT REMOVAL MENU]>==---\n");
 
+    char courseChoice = '0';
+    printf("Which course do you want to remove a student from?\n1. DT265A\n2. DT265B\n3. DT265C\n4. DT8900\n5. Exit\n");
+    scanf("%d", &courseChoice);
+    CLEAR
+
+    if(courseChoice == '5'){
+        return head;
+    }
+
+    printf("Enter the STUDENT ID of the Student you wish to remove (DT####): ");
+    char searchID[MEDIUM];
+    fgets(searchID, MEDIUM, stdin);
+    searchID[strcspn(searchID, "\r\n")] = '\0';
+    
+
+    struct node *current = head;
+    struct node *prevNode;
+    struct node *nextNode;
+
+    while(current != NULL){
+
+        if(strcmp(searchID, current->studentRecord.studentID) == 0){
+            char delChoice = 'n';
+            printf("Do you want to delete:\nNAME: %s %s\nID: %s\nCOURSE: %s\nYEAR: %d\n(y/n)\n", current->studentRecord.firstName, current->studentRecord.surname, current->studentRecord.studentID, getCourseName(current->studentRecord.courseCode), current->studentRecord.year);
+            scanf("%c", &delChoice);
+
+            switch(delChoice){
+                case 'Y':
+                case 'y':
+                    printf("%s: %p, Next node: %p, Previous node's next node: %p.\n", current->studentRecord.firstName, &current, current->nextNode, prevNode->nextNode);
+                    nextNode = current->nextNode;
+                    prevNode->nextNode = nextNode;
+                    printf("NOW! Previous Node's Next Node: %p, Next node pointer: %p\n", prevNode->nextNode, &nextNode);
+                    free(current);
+                    modifyCourseOccupancy(current->studentRecord.courseCode, -1);
+
+                    printf("Successfully deleted!\n");
+                    break;
+
+                case 'N':
+                case 'n':
+                    printf("Not deleted.\n");
+                    break;
+            }
+        }
+
+        prevNode = current;
+        current = current->nextNode;
+    }
+
+    return head;
 }
 
 // Parses the 1-4 (and edge-case numbers) when making course code human-readable.
@@ -357,8 +478,8 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
         strcpy(DT265A[i].surname, surnames[rand() % 20]);
         
         // Randomly Generating 3-digit Student ID
-        char tempStudentID[6] = "DT";
-        for(int j = 0; j < 3; j++){
+        char tempStudentID[7] = "DT";
+        for(int j = 0; j < 4; j++){
             strcat(tempStudentID, idNums[rand() % 10]);
         }
 
@@ -369,9 +490,6 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
 
         // Adding Random Year
         DT265A[i].year = (rand() % 4) + 1;
-
-        // Displaying Data
-        printf("Added new student: %s %s\n", DT265A[i].firstName, DT265A[i].surname);
 
         // Modifying the Course Occupancy
         modifyCourseOccupancy(1, 1);
@@ -387,8 +505,8 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
         strcpy(DT265B[i].surname, surnames[rand() % 20]);
         
         // Randomly Generating 3-digit Student ID
-        char tempStudentID[6] = "DT";
-        for(int j = 0; j < 3; j++){
+        char tempStudentID[7] = "DT";
+        for(int j = 0; j < 4; j++){
             strcat(tempStudentID, idNums[rand() % 10]);
         }
 
@@ -399,9 +517,6 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
 
         // Adding Random Year
         DT265B[i].year = (rand() % 4) + 1;
-
-        // Displaying Data
-        printf("Added new student: %s %s\n", DT265B[i].firstName, DT265B[i].surname);
 
         // Modifying the Course Occupancy
         modifyCourseOccupancy(2, 1);
@@ -417,8 +532,8 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
         strcpy(DT265C[i].surname, surnames[rand() % 20]);
         
         // Randomly Generating 3-digit Student ID
-        char tempStudentID[6] = "DT";
-        for(int j = 0; j < 3; j++){
+        char tempStudentID[7] = "DT";
+        for(int j = 0; j < 4; j++){
             strcat(tempStudentID, idNums[rand() % 10]);
         }
 
@@ -429,9 +544,6 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
 
         // Adding Random Year
         DT265C[i].year = (rand() % 4) + 1;
-
-        // Displaying Data
-        printf("Added new student: %s %s\n", DT265C[i].firstName, DT265C[i].surname);
 
         // Modifying the Course Occupancy
         modifyCourseOccupancy(3, 1);
@@ -447,8 +559,8 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
         strcpy(DT8900[i].surname, surnames[rand() % 20]);
         
         // Randomly Generating 3-digit Student ID
-        char tempStudentID[6] = "DT";
-        for(int j = 0; j < 3; j++){
+        char tempStudentID[7] = "DT";
+        for(int j = 0; j < 4; j++){
             strcat(tempStudentID, idNums[rand() % 10]);
         }
 
@@ -459,9 +571,6 @@ struct node* generateData(struct studentRecord DT265A[], struct studentRecord DT
 
         // Adding Random Year
         DT8900[i].year = (rand() % 4) + 1;
-
-        // Displaying Data
-        printf("Added new student: %s %s\n", DT8900[i].firstName, DT8900[i].surname);
 
         // Modifying the Course Occupancy
         modifyCourseOccupancy(4, 1);
@@ -552,17 +661,28 @@ struct node* createLinkedList(struct studentRecord DT265A[], struct studentRecor
         strcpy(listElement->studentRecord.studentID, allStudents[i].studentID);
         listElement->studentRecord.courseCode = allStudents[i].courseCode;
         listElement->studentRecord.year = allStudents[i].year;
+        listElement->nextNode = NULL;
 
-        struct node current = *head;
+        struct node *current = head;
 
-        while(current.nextNode != NULL){
-            current = *current.nextNode;
+        if(head == NULL){
+            head = listElement;
+        }
+        else{
+            struct node *current = head;
+
+            while(current->nextNode != NULL){
+                current = current->nextNode;
+            }
+
+            current->nextNode = listElement;
         }
 
-        current.nextNode = listElement;
     }
 
     printf("Linked list created!\n\n");
+
+    return head;
 }
 
 void merge(struct studentRecord sRec[], int start, int mid, int end){
@@ -620,5 +740,35 @@ void mergeSort(struct studentRecord sRec[], int start, int end){
         mergeSort(sRec, mid + 1, end);
 
         merge(sRec, start, mid, end);
+    }
+}
+
+void searchStudent(struct node *head, char *name){
+    printf("Searching for surname: %s\n", name);
+    int found = 0;
+
+    struct node current = *head;
+
+    while(current.nextNode != NULL){
+        current = *current.nextNode;
+
+        if(strcmp(current.studentRecord.surname, name) == 0){
+            printf("NAME: %s %s\nID: %s\nCOURSE: %s\nYEAR: %d\n\n", current.studentRecord.firstName, current.studentRecord.surname, current.studentRecord.studentID, getCourseName(current.studentRecord.courseCode), current.studentRecord.year);
+            found++;
+        }
+    }
+
+    if(found == 0){
+        printf("No students with that name were found!\n\n");
+    }
+}
+
+void printLinkedList(struct node *head){
+    struct node *current = head;
+
+    while(current != NULL){
+        printf("%s %s\n", current->studentRecord.firstName, current->studentRecord.surname);
+
+        current = current->nextNode;
     }
 }
