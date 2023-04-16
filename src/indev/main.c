@@ -63,9 +63,10 @@ void viewCourseData(struct studentRecord [], int);
 struct node* createLinkedList(struct studentRecord [], struct studentRecord [], struct studentRecord [], struct studentRecord [], struct node *);
 void merge(struct studentRecord [], int, int, int);
 void mergeSort(struct studentRecord [], int, int);
-void printLinkedList(struct node *head);
+void printLinkedList(struct node *);
 const char* getCourseName(int);
 int modifyCourseOccupancy(int, int);
+void findFullTime(struct node *);
 
 int main(){
     struct node *listHead = {NULL};
@@ -80,7 +81,7 @@ int main(){
 
     while(loopActive){
         printf("--=<[Please Choose an Action]>=--\n");
-        printf("1. Add User\n2. Remove User\n3. Search for User\n4. View Students\n5. Generate Test Data\n6. End Program\n");
+        printf("1. Add User\n2. Remove User\n3. Search for User\n4. View Students\n5. Find all Full Time Students\n6. Generate Test Data\n7. End Program\n");
 
         scanf("%c", &userChoice);
         CLEAR
@@ -148,11 +149,16 @@ int main(){
             }
 
             case '5':{
-                listHead = generateData(DT265A, DT265B, DT265C, DT8900, listHead, sizeof(DT265A), sizeof(DT265B), sizeof(DT265C), sizeof(DT8900));
+                findFullTime(listHead);
                 break;
             }
 
             case '6':{
+                listHead = generateData(DT265A, DT265B, DT265C, DT8900, listHead, sizeof(DT265A), sizeof(DT265B), sizeof(DT265C), sizeof(DT8900));
+                break;
+            }
+
+            case '7':{
                 printf("Goodbye!");
                 loopActive = 0;
                 break;
@@ -769,6 +775,17 @@ void printLinkedList(struct node *head){
     while(current != NULL){
         printf("%s %s\n", current->studentRecord.firstName, current->studentRecord.surname);
 
+        current = current->nextNode;
+    }
+}
+
+void findFullTime(struct node *head){
+    struct node *current = head;
+
+    while(current != NULL){
+        if(current->studentRecord.courseCode == 2 || current->studentRecord.courseCode == 4){
+            printf("NAME: %s %s\nID: %s\nCOURSE: %s\nYEAR: %d\n\n", current->studentRecord.firstName, current->studentRecord.surname, current->studentRecord.studentID, getCourseName(current->studentRecord.courseCode), current->studentRecord.year);
+        }
         current = current->nextNode;
     }
 }
