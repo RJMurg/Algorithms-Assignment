@@ -1,0 +1,32 @@
+startStructure studentInfo
+	firstName
+	surname
+	Course // 1 = Part-Time, 2 = Full-Time, 3 = Part-Time, 4 = Full-Time 
+	StudentID
+	Year
+endStructure
+
+startProgram binarySearchList
+	array studentInfo allStudents[42]
+
+	Print("Enter Surname to Search: ")
+	Input(toSearch)
+
+	Print(binarySearch(allStudents, toSearch, 0, Length(allStudents) - 1))
+endProgram
+
+startFunction binarySearch(Array, toFind, Start, End)
+	If start <= end
+		middle = (start + End) / 2
+		
+		If array[midIndex].surname == toFind
+			return array[midIndex]
+		Else If toFind < array[midIndex].surname
+			return binarySearch(array, toFind, midIndex + 1, end)
+		Else
+			return binarySearch(array, toFind, start, midIndex - 1)
+		EndIf
+	EndIf
+	
+	return -1
+endFunction

@@ -1,0 +1,17 @@
+Design a suitable datatype for manipulating and storing the data having regard to the underlying changeability and the need for instant reporting.
+Explain your design.
+
+Structure
+
+2 Structures required.
+
+1. Student Information Structure
+	First Name
+	Surname
+	Course
+	StudentID
+	Year
+
+2. Node Structure
+	Student Information Structure
+	Pointer to next Node

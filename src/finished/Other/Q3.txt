@@ -1,0 +1,24 @@
+startStructure studentInfo
+	firstName
+	surname
+	Course // 1 = Part-Time, 2 = Full-Time, 3 = Part-Time, 4 = Full-Time 
+	StudentID
+	Year
+endStructure
+
+startProgram findFullTime
+	array studentInfo allStudents[42]
+
+	findFullTime(allStudents)
+endProgram
+
+startFunction findFullTime(Array)
+	While i < LengthOf(Array)
+		If Array[i].Course == 2 OR Array[i].Course == 4
+			Print("NAME: " + Array[i].firstName + " " + Array[i].surname)
+			Print("COURSE: " + Array[i].Course)
+			Print("STUDENT ID: " + Array[i].studentID)
+			Print("Year: " + Array[i].Year)
+		EndIf
+	EndWhile
+endFunction
